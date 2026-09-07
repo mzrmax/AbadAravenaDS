@@ -3,6 +3,8 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import train_test_split
 
 #### 00. CONFIGURACIÓN
 
@@ -40,7 +42,7 @@ print(df["ocean_proximity"].value_counts())
 #### 02. VISUALIZACIÓN
 
 # HISTOGRAMAS
-plt.figure()
+#plt.figure()
 df.hist(bins=50, figsize=(20,15))
 plt.title("Resumen")
 
@@ -51,12 +53,12 @@ df["median_house_value"].hist(bins=50, figsize=(20,15))
 plt.title("FRECUENCIA DE VALORES")
 
 # DENSIDAD DE LOS DATOS
-plt.figure()
+#plt.figure()
 df.plot(kind="scatter", x="longitude", y="latitude", alpha=0.2)
 plt.title("DENSIDAD DE DATOS")
 
 # COLORMAT
-plt.figure()
+#plt.figure()
 df.plot(    kind    ="scatter",
             x       ="longitude",
             y       ="latitude",
@@ -69,5 +71,20 @@ df.plot(    kind    ="scatter",
             colorbar=True,)
 plt.legend()
 plt.title("VALORES")
+
+
+#### 03. TRATAMIENTO DE DATOS
+
+### SAMPLEO
+
+train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)
+
+df["income_cat"] = pd.cut(
+    df["median_income"],
+    bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
+    labels=[1, 2, 3, 4, 5])
+
+plt.figure()
+df["income_cat"].hist()
 
 plt.show()
